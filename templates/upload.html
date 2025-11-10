@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload CSV File</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    * {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20220522/pngtree-abstract-white-and-light-gray-wave-modern-soft-luxury-texture-with-image_1379862.jpg'); /* Change to your image file name */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.container {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+/* Upload Container */
+.upload-wrapper {
+  background-color: #00391e;
+  border-radius: 20px;
+  width: 400px;
+  height: 420px;
+  text-align: center;
+  color: white;
+  padding: 40px 30px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 15px;
+  border: 3px dashed #90ee90; /* Changed to dashed */
+  overflow: hidden;
+}
+
+/* Upload Icon */
+.upload-wrapper .icon {
+  font-size: 50px;
+  color: white;
+}
+
+/* Texts */
+.upload-wrapper h2 {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 10px 0;
+}
+.upload-wrapper .separator {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+/* File Input Hidden */
+.upload-wrapper input[type="file"] {
+  display: none;
+}
+
+/* Browse Button */
+.upload-wrapper label {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Filename */
+.filename-display {
+  font-size: 14px;
+  margin-top: 5px;
+  opacity: 0.95;
+  word-break: break-word;
+  text-align: center;
+}
+
+/* Upload Button */
+.upload-btn {
+  display: none;
+  padding: 12px 20px;
+  background-color: transparent;
+  border: 2px solid rgb(19, 73, 3);
+  color: rgb(3, 201, 66);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: auto;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.upload-btn:hover {
+  background-color: #a4f4a4;
+  transform: scale(1.05);
+}
+
+/* Progress Bar */
+.progress-bar {
+  height: 12px;
+  background-color: #ccc;
+  border-radius: 10px;
+  margin-top: 20px;
+  overflow: hidden;
+  display: none;
+  width: 100%;
+}
+.progress-bar-inner {
+  height: 100%;
+  width: 0%;
+  background-color: #2e7d32;
+  transition: width 0.3s ease;
+}
+
+/* Note */
+.upload-wrapper .note {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* Results Box */
+.results-box {
+  background: #ffffff;
+  width: 400px;
+  height: 420px;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  color: #00391e;
+  border: 3px dashed #00391e; /* Changed to dashed */
+}
+
+/* Results Content */
+.results-box .welcome {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+.section-title {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #00391e;
+}
+.results-box a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #00391e;
+  font-weight: 500;
+  font-size: 15px;
+}
+.results-box a:hover {
+  text-decoration: underline;
+}
+
+/* Material Icons */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Upload Container -->
+    <div class="upload-wrapper" id="uploadWrapper">
+      <div class="icon material-symbols-outlined">upload_file</div>
+      <h2>Drag your csv file<br>here to upload</h2>
+      <div class="separator">OR</div>
+      <label for="fileInput">BROWSE FILES</label>
+      <input type="file" id="fileInput" accept=".csv" />
+      <div class="filename-display" id="filenameDisplay"></div>
+      <button class="upload-btn" id="uploadBtn">Upload</button>
+      <div class="progress-bar" id="progressBar">
+        <div class="progress-bar-inner" id="progressBarInner"></div>
+      </div>
+      <div class="note">Max file size: 100MB</div>
+    </div>
+
+    <!-- Results Box -->
+    <div class="results-box" id="resultsBox">
+      <div class="welcome" id="welcomeText">
+        Welcome! 😊<br>Upload a file to get started.
+      </div>
+      <div id="links" style="display:none;"></div>
+    </div>
+
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const filenameDisplay = document.getElementById('filenameDisplay');
+    const progressBarInner = document.getElementById('progressBarInner');
+    const progressBar = document.getElementById('progressBar');
+    const welcomeText = document.getElementById("welcomeText");
+    const linksContainer = document.getElementById("links");
+
+    let selectedFile = null;
+
+    fileInput.addEventListener('change', () => {
+      selectedFile = fileInput.files[0];
+
+      if (!selectedFile) return;
+
+      if (selectedFile.size > 100 * 1024 * 1024) {
+        alert("❌ File is too large. Please upload a file less than 100MB.");
+        return;
+      }
+
+      if (!selectedFile.name.toLowerCase().endsWith('.csv')) {
+        alert("❌ Invalid file type. Only CSV files are allowed.");
+        return;
+      }
+
+      filenameDisplay.textContent = `${selectedFile.name} (${(selectedFile.size / (1024 * 1024)).toFixed(2)}MB)`;
+      uploadBtn.style.display = 'inline-block';
+    });
+
+    uploadBtn.addEventListener('click', () => {
+      if (!selectedFile) return;
+
+      uploadBtn.disabled = true;
+      uploadBtn.textContent = "Uploading...";
+      progressBar.style.display = 'block';
+
+      const formData = new FormData();
+      formData.append('emailFile', selectedFile);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/upload', true);
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = (event.loaded / event.total) * 100;
+          progressBarInner.style.width = percent + '%';
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText);
+          progressBarInner.style.width = '100%';
+          uploadBtn.textContent = "Uploaded ✅";
+
+          // Show download links
+          welcomeText.style.display = 'none';
+          linksContainer.style.display = 'block';
+          linksContainer.innerHTML = `
+            <div class="section">
+              <div class="section-title">📂 Download Raw File:</div>
+              <a href="${response.file_url}" target="_blank">
+                <span class="material-symbols-outlined">download</span>
+                Download raw CSV
+              </a>
+            </div>
+            <div class="section">
+              <div class="section-title">📂 Download Processed File:</div>
+              <a href="${response.processed_url}" target="_blank">
+                <span class="material-symbols-outlined">download</span>
+                Download processed CSV
+              </a>
+            </div>
+            <div class="section">
+              <div class="section-title">📄 View Threaded Email Output:</div>
+              <a href="/view_threads" target="_self">
+                <span class="material-symbols-outlined">open_in_new</span>
+                View Threaded Emails
+              </a>
+            </div>
+          `;
+        } else {
+          uploadBtn.textContent = "Upload Failed ❌";
+        }
+      };
+
+      xhr.onerror = () => {
+        uploadBtn.textContent = "Error ❌";
+      };
+
+      xhr.send(formData);
+    });
+  </script>
+</body>
+</html>

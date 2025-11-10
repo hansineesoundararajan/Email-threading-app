@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Email Threads</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20220522/pngtree-abstract-white-and-light-gray-wave-modern-soft-luxury-texture-with-image_1379862.jpg'); /* Change to your image file name */
+  background-position: center;
+  background-repeat: repeat;
+      padding: 20px;
+      color: #00391e;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00391e;
+    }
+
+    #searchInput {
+      display: block;
+      width: 60%;
+      margin: 20px auto;
+      padding: 8px 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .thread {
+      background: #f2f2f2;
+      margin: 15px auto;
+      padding: 15px 20px;
+      border-radius: 10px;
+      width: 80%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      color: #00391e;
+    }
+
+    .email {
+      border-top: 1px solid #ccc;
+      padding: 10px 0;
+      cursor: pointer;
+    }
+
+    .email:first-child {
+      border-top: none;
+    }
+
+    .email strong {
+      color: #007b33; /* Deep green instead of blue */
+    }
+
+    .email p {
+      margin: 4px 0;
+      word-break: break-word;
+    }
+
+    .inclusive-email {
+      background: #e4f5e8; /* light green instead of light blue */
+      border-left: 5px solid #007b33; /* deep green */
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    .inclusive-label {
+      background-color: #007b33;
+      color: white;
+      padding: 2px 6px;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+
+    .full-body {
+      display: none;
+      margin-top: 6px;
+      padding: 8px;
+      background-color: #d6f0dc; /* soft green */
+      border-radius: 6px;
+      color: #00391e;
+    }
+
+    .email:hover {
+      background-color: #eefaf1; /* hover light green */
+    }
+  </style>
+</head>
+<body>
+  <h1>Email Threads</h1>
+  <input id="searchInput" type="text" placeholder="Search..." />
+
+  <div id="threads-container">
+    {% for thread in threads %}
+      {% set inclusive = inclusives[thread.thread_id] %}
+      <div class="thread" data-subject="{{ thread.emails[0]['Normalized_Subject'] | e }}" data-participants="{{ thread.emails[0]['Participant_Signature'] | e }}">
+        <h3>Thread ID: {{ thread.thread_id }}</h3>
+
+        <!-- Inclusive Email -->
+        <div class="email inclusive-email" onclick="toggleBody(this)">
+          <p><strong>Subject:</strong> {{ inclusive.Subject }}</p>
+          <p><strong>From:</strong> {{ inclusive.From }}</p>
+          <p><strong>To:</strong> {{ inclusive.To }}</p>
+          <p><strong>Date:</strong> {{ inclusive.Date }}</p>
+          <p><strong>Body:</strong> {{ inclusive.Body[:30] }}{% if inclusive.Body|length > 30 %}...{% endif %}</p>
+          <p><em><span class="inclusive-label">Inclusive Email</span></em></p>
+          <div class="full-body">{{ inclusive.Body }}</div>
+        </div>
+
+        <!-- Other Emails -->
+        {% for email in thread.emails %}
+          {% if email.Subject != inclusive.Subject or email.Date != inclusive.Date or email.From != inclusive.From %}
+            <div class="email" onclick="toggleBody(this)">
+              <p><strong>Subject:</strong> {{ email.Subject }}</p>
+              <p><strong>From:</strong> {{ email.From }}</p>
+              <p><strong>To:</strong> {{ email.To }}</p>
+              <p><strong>Date:</strong> {{ email.Date }}</p>
+              <p><strong>Body:</strong> {{ email.Body[:30] }}{% if email.Body|length > 30 %}...{% endif %}</p>
+              <div class="full-body">{{ email.Body }}</div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const threadsContainer = document.getElementById('threads-container');
+    const threads = [...threadsContainer.querySelectorAll('.thread')];
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase();
+      threads.forEach(thread => {
+        const threadText = thread.textContent.toLowerCase();
+        const datasetText = Object.values(thread.dataset).join(' ').toLowerCase();
+
+        if (threadText.includes(query) || datasetText.includes(query)) {
+          thread.style.display = '';
+        } else {
+          thread.style.display = 'none';
+        }
+      });
+    });
+
+    function toggleBody(emailDiv) {
+      const fullBody = emailDiv.querySelector('.full-body');
+      if (fullBody) {
+        fullBody.style.display = fullBody.style.display === 'block' ? 'none' : 'block';
+      }
+    }
+  </script>
+</body>
+</html>

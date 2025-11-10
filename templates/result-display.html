@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload Result</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #6dd5ed, #2193b0);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .result-box {
+      background-color: #ffffff;
+      padding: 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      width: 100%;
+      text-align: left;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1a1a1a;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    a {
+      display: inline-block;
+      color: #2193b0;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 6px 0;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .material-symbols-outlined {
+      vertical-align: middle;
+      margin-right: 6px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="result-box">
+    <h2>✅ Upload & Processing Complete</h2>
+    <div id="links"></div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get("raw");
+    const processed = params.get("processed");
+    const thread = params.get("thread");
+
+    document.getElementById("links").innerHTML = `
+      <div class="section">
+        <div class="section-title">📂 Download Raw File:</div>
+        <a href="${raw}" target="_blank"><span class="material-symbols-outlined">download</span>Download raw CSV</a>
+      </div>
+
+      <div class="section">
+        <div class="section-title">📂 Download Processed File:</div>
+        <a href="${processed}" target="_blank"><span class="material-symbols-outlined">download</span>Download processed CSV</a>
+      </div>
+
+      <div class="section">
+        <div class="section-title">📄 View Threaded Email Output:</div>
+        <a href="/result/${thread}" target="_self"><span class="material-symbols-outlined">open_in_new</span>View Threaded Emails</a>
+      </div>
+    `;
+  </script>
+</body>
+</html>
