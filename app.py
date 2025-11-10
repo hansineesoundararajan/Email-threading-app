@@ -8,7 +8,7 @@ import re
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-app.config['MAX_CONTENT_LENGTH'] =  100* 1024 * 1024  # 50MB max
+app.config['MAX_CONTENT_LENGTH'] =  20* 1024 * 1024  # 20MB max
 ALLOWED_EXTENSIONS = {'csv'}
 
 def allowed_file(filename):
